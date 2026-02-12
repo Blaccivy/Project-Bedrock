@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dynamodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dynamodb
+  template:
+    metadata:
+      labels:
+        app: dynamodb
+    spec:
+      containers:
+        - name: dynamodb
+          image: {{ .Values.image }}
+          args: ["-jar", "DynamoDBLocal.jar", "-sharedDb"]
+          ports:
+            - containerPort: {{ .Values.port }}

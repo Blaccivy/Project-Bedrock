@@ -1,0 +1,5 @@
+apiVersion: v2
+name: dynamodb
+version: 0.1.0
+description: DynamoDB for retail-store app
+type: application

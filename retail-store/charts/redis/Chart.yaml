@@ -1,0 +1,5 @@
+apiVersion: v2
+name: redis
+version: 0.1.0
+description: Redis for retail-store app
+type: application

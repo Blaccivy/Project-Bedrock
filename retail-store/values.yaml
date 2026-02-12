@@ -1,0 +1,69 @@
+namespace: retail-app
+
+ui:
+  image:
+    repository: public.ecr.aws/aws-containers/retail-store-sample-ui
+    tag: "1.4.0"
+    pullPolicy: IfNotPresent
+  servicePort: 80
+  containerPort: 8080
+
+catalog:
+  image:
+    repository: public.ecr.aws/aws-containers/retail-store-sample-catalog
+    tag: "1.4.0"
+    pullPolicy: IfNotPresent
+  servicePort: 8080
+  containerPort: 8080
+
+cart:
+  image:
+    repository: public.ecr.aws/aws-containers/retail-store-sample-cart
+    tag: "1.4.0"
+    pullPolicy: IfNotPresent
+  servicePort: 8080
+  containerPort: 8080
+
+orders:
+  image:
+    repository: public.ecr.aws/aws-containers/retail-store-sample-orders
+    tag: "1.4.0"
+    pullPolicy: IfNotPresent
+  servicePort: 8080
+  containerPort: 8080
+
+checkout:
+  image:
+    repository: public.ecr.aws/aws-containers/retail-store-sample-checkout
+    tag: "1.4.0"
+    pullPolicy: IfNotPresent
+  servicePort: 8080
+  containerPort: 8080
+
+
+  # In-cluster dependencies
+
+mysql:
+  image: mysql:8.0
+  database: catalogdb
+  user: catalog
+  password: catalogpass
+  rootPassword: rootpass
+
+postgresql:
+   image: postgres:15
+   database: ordersdb
+   user: orders
+   password: orderspass
+
+dynamodb:
+  image: amazon/dynamodb-local
+  port: 8000
+
+redis:
+  image: redis:7
+  port: 6379
+
+rabbitmq:
+  image: rabbitmq:3-management
+  port: 5672
