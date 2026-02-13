@@ -52,21 +52,7 @@ resource "aws_iam_policy" "bedrock_dev_readonly" {
           "iam:GetRole",
           "iam:ListMFADevices",
           "iam:ListVirtualMFADevices",
-          # IAM policies
-          "iam:ListPolicies",
-          "iam:ListGroups",
-          "iam:ListGroupsForUser",
-          "iam:GetPolicy",
-          "iam:GetPolicyVersion",
-          "iam:ListAttachedUserPolicies",
-          "iam:ListAttachedRolePolicies",
-          "iam:ListAttachedGroupPolicies",
-          "iam:GetPolicy",
-          "iam:GetPolicyVersion",
-          "iam:ListUserPolicies",
-          "iam:ListRolePolicies",
-         # This is broad, consider narrowing to specific policies if needed
-        
+          
         ]
         Resource = "*"
       }

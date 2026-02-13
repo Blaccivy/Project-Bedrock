@@ -70,18 +70,15 @@ resource "aws_iam_role" "github_actions" {
         Action = "sts:AssumeRoleWithWebIdentity"
         Condition = {
           StringEquals = {
-            "token.actions.githubusercontent.com:sub" = "repo:${local.github_owner}/${local.github_repo}:ref:refs/heads/main"
+            "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
           }
+          StringLike = {
+            "token.actions.githubusercontent.com:sub": "repo:${local.github_owner}/${local.github_repo}:ref:refs/heads/main"
         }
+      }
       }
     ]
   })
-}
-
-# Attach a policy (example: AdministratorAccess for testing)
-resource "aws_iam_role_policy_attachment" "github_actions_attach" {
-  role       = aws_iam_role.github_actions.name
-  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
 
 provider "aws" {
@@ -108,9 +105,12 @@ resource "aws_iam_role" "read_only_cross_account" {
   })
 }
 
-# Attach AWS managed ReadOnlyAccess policy
-resource "aws_iam_role_policy_attachment" "read_only_attach" {
-  provider  = aws.admin
-  role      = aws_iam_role.read_only_cross_account.name
-  policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+
+# Attach a policy (example: AdministratorAccess for testing)
+resource "aws_iam_role_policy_attachment" "github_actions_attach" {
+  role       = aws_iam_role.github_actions.name
+  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
+
+
+
