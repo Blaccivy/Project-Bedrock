@@ -2,6 +2,10 @@
 
 resource "aws_iam_user" "bedrock_dev_view" {
   name = "bedrock-dev-view"
+
+  tags = {
+    Name = "barakat-2025-capstone"
+   }
 }
 
 resource "aws_iam_user_login_profile" "bedrock_dev_view" {

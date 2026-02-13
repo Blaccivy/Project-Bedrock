@@ -58,7 +58,7 @@ resource "aws_eip" "nat" {
   domain = "vpc"
 
   tags = {
-    Name = "project-bedrock-nat-eip"
+    Name = "barakat-2025-capstone"
   }
 }
 
