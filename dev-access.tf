@@ -74,27 +74,27 @@ resource "kubernetes_role_binding_v1" "bedrock_dev_view" {
 
 # Outputs for IAM user credentials and console signin URL
 
-output "bedrock_dev_view_access_key_id" {
-  value = aws_iam_access_key.bedrock_dev_view.id
-}
+# output "bedrock_dev_view_access_key_id" {
+#   value = aws_iam_access_key.bedrock_dev_view.id
+# }
 
-output "bedrock_dev_view_secret_access_key" {
-  value     = aws_iam_access_key.bedrock_dev_view.secret
-  sensitive = true
-}
+# output "bedrock_dev_view_secret_access_key" {
+#   value     = aws_iam_access_key.bedrock_dev_view.secret
+#   sensitive = true
+# }
 
-output "console_username" {
-  value = aws_iam_user.bedrock_dev_view.name
-}
+# output "console_username" {
+#   value = aws_iam_user.bedrock_dev_view.name
+# }
 
-output "console_password" {
-  value     = aws_iam_user_login_profile.bedrock_dev_view.password
-  sensitive = true
-}
+# output "console_password" {
+#   value     = aws_iam_user_login_profile.bedrock_dev_view.password
+#   sensitive = true
+# }
 
-output "console_signin_url" {
-  value = "https://${data.aws_caller_identity.current.account_id}.signin.aws.amazon.com/console"
-}
+# output "console_signin_url" {
+#   value = "https://${data.aws_caller_identity.current.account_id}.signin.aws.amazon.com/console"
+# }
 
 data "aws_caller_identity" "current" {}
 
