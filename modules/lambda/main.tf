@@ -5,6 +5,10 @@ locals {
 # S3 bucket
 resource "aws_s3_bucket" "assets" {
   bucket = local.bucket_name
+
+  tags = {
+    name = "barakat-2025-capstone"
+  }
 }
 
 resource "aws_s3_bucket_versioning" "assets" {

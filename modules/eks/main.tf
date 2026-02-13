@@ -28,7 +28,7 @@ resource "aws_eks_node_group" "default" {
    ami_type = "BOTTLEROCKET_x86_64"
 
    tags = {
-    Name = "bedrock-ng"
+    Name = "barakat-2025-capstone"
   }
 
 

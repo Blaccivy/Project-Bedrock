@@ -1,6 +1,10 @@
 resource "aws_iam_role" "eks_cluster" {
   name = "project-bedrock-eks-cluster-role"
 
+  tags = {
+    Name = "barakat-2025-capstone"
+   }
+
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
