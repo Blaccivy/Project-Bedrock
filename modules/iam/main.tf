@@ -83,3 +83,34 @@ resource "aws_iam_role_policy_attachment" "github_actions_attach" {
   role       = aws_iam_role.github_actions.name
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
+
+provider "aws" {
+  alias  = "admin"
+  region = "us-east-1"
+  # Use admin account credentials here
+}
+
+resource "aws_iam_role" "read_only_cross_account" {
+  provider = aws.admin
+  name     = "read-only-cross-account"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Principal = {
+          AWS = "arn:aws:iam::805206611230:user/bedrock-dev-view"
+        },
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+}
+
+# Attach AWS managed ReadOnlyAccess policy
+resource "aws_iam_role_policy_attachment" "read_only_attach" {
+  provider  = aws.admin
+  role      = aws_iam_role.read_only_cross_account.name
+  policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+}
