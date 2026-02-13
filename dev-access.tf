@@ -16,45 +16,74 @@ resource "aws_iam_user_login_profile" "bedrock_dev_view" {
 }
 
 
+# IAM policy with read-only access to EC2, EKS, and CloudWatch
+resource "aws_iam_policy" "bedrock_dev_readonly" {
+  name        = "BedrockDevReadOnly"
+  description = "Read-only access to EC2, EKS, and CloudWatch for Bedrock developers"
+  policy      = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = [
+          # EC2
+          "ec2:Describe*",
+          "elasticloadbalancing:Describe*",
+          "autoscaling:Describe*",
+
+          # EKS
+          "eks:Describe*",
+          "eks:List*",
+
+          # CloudWatch / Logs
+          "cloudwatch:Get*",
+          "cloudwatch:List*",
+          "cloudwatch:Describe*",
+          "logs:Get*",
+          "logs:List*",
+          "logs:Describe*",
+
+          # IAM read access
+          "iam:ListUsers",
+          "iam:GetUser",
+          "iam:ListGroups",
+          "iam:GetGroup",
+          "iam:ListRoles",
+          "iam:GetRole",
+          "iam:ListMFADevices",
+          "iam:ListVirtualMFADevices",
+          # IAM policies
+          "iam:ListPolicies",
+          "iam:ListGroups",
+          "iam:ListGroupsForUser",
+          "iam:GetPolicy",
+          "iam:GetPolicyVersion",
+          "iam:ListAttachedUserPolicies",
+          "iam:ListAttachedRolePolicies",
+          "iam:ListAttachedGroupPolicies",
+          "iam:GetPolicy",
+          "iam:GetPolicyVersion",
+          "iam:ListUserPolicies",
+          "iam:ListRolePolicies",
+         # This is broad, consider narrowing to specific policies if needed
+        
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+
 resource "aws_iam_user_policy_attachment" "readonly" {
   user       = aws_iam_user.bedrock_dev_view.name
-  policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+  policy_arn = aws_iam_policy.bedrock_dev_readonly.arn
 }
 
 resource "aws_iam_access_key" "bedrock_dev_view" {
   user = aws_iam_user.bedrock_dev_view.name
 }
 
-# Kubernetes provider to manage aws-auth config map
-
-# data "aws_eks_cluster" "this" {
-#   name = var.cluster_name
-# }
-
-# data "aws_eks_cluster_auth" "this" {
-#   name = var.cluster_name
-# }
-
-
-
-# resource "kubernetes_config_map_v1" "aws_auth" {
-#   metadata {
-#     name      = "aws-auth"
-#     namespace = "kube-system"
-#   }
-
-#   data = {
-#     mapUsers = yamlencode([
-#       {
-#         userarn  = aws_iam_user.bedrock_dev_view.arn
-#         username = "bedrock-dev-view"
-#         groups   = ["bedrock-dev-view"]
-#       }
-#     ])
-#   }
-# }
-
-# RBAC RoleBinding for Bedrock developers to have view access in retail-app namespace
 
 resource "kubernetes_role_binding_v1" "bedrock_dev_view" {
   metadata {
@@ -74,31 +103,6 @@ resource "kubernetes_role_binding_v1" "bedrock_dev_view" {
     api_group = "rbac.authorization.k8s.io"
   }
 }
-
-
-# Outputs for IAM user credentials and console signin URL
-
-# output "bedrock_dev_view_access_key_id" {
-#   value = aws_iam_access_key.bedrock_dev_view.id
-# }
-
-# output "bedrock_dev_view_secret_access_key" {
-#   value     = aws_iam_access_key.bedrock_dev_view.secret
-#   sensitive = true
-# }
-
-# output "console_username" {
-#   value = aws_iam_user.bedrock_dev_view.name
-# }
-
-# output "console_password" {
-#   value     = aws_iam_user_login_profile.bedrock_dev_view.password
-#   sensitive = true
-# }
-
-# output "console_signin_url" {
-#   value = "https://${data.aws_caller_identity.current.account_id}.signin.aws.amazon.com/console"
-# }
 
 data "aws_caller_identity" "current" {}
 
