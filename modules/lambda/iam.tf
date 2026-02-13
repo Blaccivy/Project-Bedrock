@@ -19,6 +19,9 @@ resource "aws_iam_role_policy_attachment" "lambda_logs" {
 
 resource "aws_iam_user" "grader" {
   name = "bedrock-grader"
+  tags = {
+    Name = "barakat-2025-capstone"
+}
 }
 
 resource "aws_iam_user_policy" "grader_s3_access" {

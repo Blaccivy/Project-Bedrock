@@ -20,5 +20,5 @@ output "vpc_id" {
 
 output "assests_bucket_name" {
     description = "S3 bucket for application assets"
-  value = aws_s3_bucket.assets.bucket
+  value = module.lambda.assets_bucket_name
 }
