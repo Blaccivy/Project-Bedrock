@@ -10,7 +10,7 @@ on:
 
 jobs:
   terraform:
-    name: "Terraform Workflow"
+    name: "Terraform workflow"
     runs-on: ubuntu-latest
     env:
       TF_VERSION: 1.6.0
